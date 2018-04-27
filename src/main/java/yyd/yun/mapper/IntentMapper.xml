@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yyd.yun.dao.IntentDao">
+	<resultMap type="yyd.yun.beans.Intent" id="BaseResult">
+		<result column="id"			 	property="id" 				jdbcType="INTEGER"/>
+		<result column="intent" 	 	property="intent" 			jdbcType="VARCHAR"/>
+		<result column="intent_english" property="intentEnglish" 	jdbcType="VARCHAR"/>
+		<result column="scene_id" 		property="sceneId" 			jdbcType="INTEGER"/>
+		<result column="operator_id" 	property="operatorId"  		jdbcType="BIGINT"/>
+		<result column="create_date" 	property="createDate"  		jdbcType="TIMESTAMP"/>
+		<result column="update_date" 	property="updateDate"  		jdbcType="TIMESTAMP"/>
+	</resultMap>
+
+	<sql id="column">
+		id,intent,intent_english,operator_id,create_date,update_date
+	</sql>
+
+	<insert id="addIntent">
+		insert into intent(intent,intent_english,scene_id,operator_id,create_date) 
+		value(#{intent},#{intentEnglish},#{sceneId},#{operatorId},now())
+	</insert>
+				
+	<select id="queryByIdIntent" resultMap="BaseResult">
+		select <include refid="column"/> from intent where operator_id = #{operatorId}
+	</select>
+	
+	<select id="findByName" resultMap="BaseResult">
+		select <include refid="column"/> from intent where operator_id = #{operatorId} and intent = #{intent}
+	</select>
+	
+	<select id="findIntentById" resultMap="BaseResult">
+		select <include refid="column"/> from intent 
+		<where>
+			<if test="operatorId != null and operatorId != ''">
+				and operator_id = #{operatorId}
+			</if>
+		    <if test="intent != null and intent != ''">
+				and intent = #{intent}
+			</if>
+			<if test="sceneId != null and sceneId != ''">
+				and scene_id = #{sceneId}
+			</if>
+			<if test="id != null and id != ''">
+				and id = #{id}
+			</if>
+		</where>
+	</select>
+	
+	<delete id="delTntent">
+		delete from intent where id = #{id} and operator_id = #{operatorId}
+	</delete>
+	
+</mapper>

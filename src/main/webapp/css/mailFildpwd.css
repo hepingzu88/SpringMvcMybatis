@@ -1,0 +1,49 @@
+@CHARSET "UTF-8";
+.div{
+	z-index: 9999;
+    position: fixed;
+    top: 40%;
+    left: 53%;
+    width: 510px;
+    height: 310px;
+    margin: -180px 0 0 -330px;
+    border-radius: 5px;
+    border: solid 2px #fff;
+    background-color: #fff;
+    display: block;
+    box-shadow: 0 0 20px #666;
+}
+.input_password{
+	border-radius: 4px;
+	width: 300px;
+	height: 40px;
+	border:1px solid #DBDBDB;
+}
+.verify{
+	border-radius: 4px;
+	width: 148px;
+	height: 40px;
+	border:1px solid #DBDBDB;
+}
+img{
+	border-radius: 4px;
+	width: 148px;
+	height: 40px;
+}
+button{
+	background-color: #31b968; 
+	border-color: #31b968;
+	width: 150px;
+	height: 40px;
+	border-radius: 2px;
+	border:1px solid #DBDBDB;
+}
+.div_one{
+	text-align: center;
+	margin-top: 10px;
+}
+body{
+	margin-top: 140px; 
+	margin-left: 700px;background-image: url('/image/timg.jpg');  
+	background-repeat:no-repeat;
+}

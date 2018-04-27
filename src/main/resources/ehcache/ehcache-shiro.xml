@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
+		<diskStore path="java.io.tmpdir/yyd/shiro" />
+		<!-- 默认缓存 -->
+		<!-- 
+			maxElementsInMemory 缓存的上限，最多可以存储多少个对象
+			eternal	对象是否永久有效,为false时timeToIdleSeconds和timeToLiveSeconds才有效
+			timeToIdleSeconds	最后一次访问缓存的日期至失效之时的时间间隔(单位：秒)，默认值是0，也就是可闲置时间无穷大。
+			timeToLiveSeconds	缓存自创建日期起至失效时的间隔时间(单位：秒)，最大时间介于创建时间和失效时间之间。
+			overflowToDisk	当内存中对象数量达到maxElementsInMemory时，Ehcache是否将对象写到磁盘中。 
+			diskSpoolBufferSizeMB	这个参数设置DiskStore(磁盘缓存)的缓存区大小，默认是30MB，每个Cache都应该有自己的一个缓冲区
+			maxElementsOnDisk	硬盘最大缓存个数。 
+			diskPersistent 	在VM重启的时候是否持久化磁盘缓存，默认是false。
+			diskExpiryThreadIntervalSeconds 磁盘缓存的清理线程运行间隔，默认是120秒.
+			memoryStoreEvictionPolicy	当内存缓存达到最大，有新的element加入的时候，移除缓存中element的策略。默认是LRU（最近很少使用），可选的有LFU和FIFO
+		 -->
+	<defaultCache
+			maxElementsInMemory="10000"
+			eternal="false"
+			timeToIdleSeconds="120"
+			timeToLiveSeconds="120"
+			overflowToDisk="true"
+			diskSpoolBufferSizeMB="30"
+			maxElementsOnDisk="10000000"
+			diskPersistent="false"
+			diskExpiryThreadIntervalSeconds="120"/>
+	<cache name="yyd.shiroCache"
+		   maxElementsInMemory="500"
+		   eternal="false"
+		   timeToIdleSeconds="1200"
+		   overflowToDisk="true"
+		   diskPersistent="true"/>
+
+	<!--验证码-->
+	<cache name="yyd.captcha" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="60"
+		   overflowToDisk="true" diskPersistent="false"/>
+
+	<!--密码错误记录-->
+	<cache name="yyd.passwordRetryCache" maxElementsInMemory="500" eternal="false" timeToIdleSeconds="120"
+		   overflowToDisk="true" diskPersistent="false"/>
+</ehcache>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yyd.yun.dao.OperatorMapperVo">
+
+  <resultMap id="BaseResultMap" type="yyd.yun.beans.OperatorVo">
+    <id 	column="id" 				jdbcType="BIGINT" 		property="id" />
+    <result column="username" 			jdbcType="VARCHAR" 		property="username" />
+    <result column="password" 			jdbcType="VARCHAR" 		property="password" />
+    <result column="salt" 				jdbcType="VARCHAR" 		property="salt" />
+    <result column="create_date"		jdbcType="TIMESTAMP" 	property="createDate"/>
+    <result column="role_name" 			jdbcType="VARCHAR" 		property="roleName"/>
+    <result column="role_id" 			jdbcType="BIGINT" 		property="roleId"/>
+    <result column="permission_name" 	jdbcType="VARCHAR"  	property="permission"/>
+    <result column="permission_id" 		jdbcType="BIGINT"   	property="permissionId"/>
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+      pms_operator.id as id,pms_operator.username,pms_operator.password,pms_operator.salt,pms_operator.create_date
+  </sql>
+  
+  <select id="selectUserPermissionRole" resultMap="BaseResultMap">
+  	 SELECT
+		<include refid="Base_Column_List"/>,
+		pms_role.id as roleId,pms_role.role_name as roleName,
+		pms_permission.id as permissionId,pms_permission.permission_name as permissionName
+	FROM
+		pms_operator
+	LEFT JOIN pms_role_operator ON pms_operator.id = pms_role_operator.operator_id
+	LEFT JOIN pms_role ON pms_role_operator.role_id = pms_role.id
+	LEFT JOIN pms_role_permission ON pms_role_permission.role_id = pms_role.id
+	LEFT JOIN pms_permission ON pms_role_permission.permission_id = pms_permission.id
+  </select>
+  
+  <select id="selectUserPermission" resultMap="BaseResultMap">
+  	   SELECT 
+	   <include refid="Base_Column_List"/>,pms_permission.permission_name,pms_permission.id as permissionId
+	FROM
+	  pms_role_permission,
+	  pms_permission,
+	  pms_role_operator,
+	  pms_operator
+	WHERE pms_role_permission.permission_id = pms_permission.id
+	  AND pms_role_permission.role_id = pms_role_operator.role_id
+	  AND pms_role_operator.operator_id = pms_operator.id
+	  AND pms_operator.id = #{id}
+  </select>
+  
+  <!-- 角色权限表 -->
+  <select id="selectRolePermission" resultMap="BaseResultMap">
+  	select * from pms_role_permission 
+  	<where>
+  		<if test="roleId != null and roleId != ''">
+  			and role_id = #{roleId}
+  		</if>
+  		<if test="permissionId != null and permissionId != ''">
+  			and permission_id = #{permissionId}
+  		</if>
+  	</where>
+  </select>
+  
+  <!-- 查询用户角色表 -->
+  <select id="selectUserRole" resultMap="BaseResultMap">
+  	select * from pms_role_operator
+  	<where>
+  		<if test="roleId != null and roleId != ''">
+  			and role_id = #{roleId}
+  		</if>
+  		<if test="operatorId != null and operatorId != ''">
+  			and operator_id = #{operatorId}
+  		</if>
+  	</where>
+  </select>
+  
+  
+  <select id="findRolePermission" resultMap="BaseResultMap">
+  	SELECT
+	  pms_role.id as roleId,pms_role.role_name as roleName, 
+	  pms_permission.id as permissionId,pms_permission.permission_name as permissionName,pms_permission.permission as permission
+	FROM
+		pms_role left join pms_role_permission on pms_role_permission.role_id = pms_role.id
+	LEFT JOIN pms_permission ON pms_role_permission.permission_id = pms_permission.id
+  </select>
+  
+  <!-- 查询所有用户角色表 -->
+  <select id="selectAllUserRole" resultMap="BaseResultMap">
+  	SELECT
+	pms_operator.id as id,pms_operator.username,pms_operator.password,pms_operator.salt,pms_operator.create_date,pms_role.id as roleId,pms_role.role_name as roleName
+	FROM
+		pms_operator 
+	LEFT JOIN pms_role_operator  ON pms_operator.id = pms_role_operator.operator_id
+	LEFT JOIN pms_role ON pms_role_operator.role_id = pms_role.id
+  </select>
+  
+  
+</mapper>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="yyd.yun.log.dao.RobotOnlineInfoDao" >
+	<resultMap type="yyd.yun.log.domain.RobotOnlineInfo" id="BaseResultMap">
+		<result column="i"  			property="i"  			/>
+		<result column="rid"  			property="rid"  		/>
+		<result column="rtype"  		property="rtype"  		/>
+		<result column="ip"   			property="ip"  			/>
+		<result column="city"   		property="city"  		/>
+		<result column="province"  		property="province"  	/>
+		<result column="online_time"  	property="onlineTime"   />
+		<result column="offline_time" 	property="offlineTime"/>
+	</resultMap>
+
+	<sql id="Base_column">
+		i,rid,ip,city,province,online_time,offonline_time
+	</sql>
+	
+	<select id="queryAllRtype" resultMap="BaseResultMap">
+		select rtype from log_robot_online_info GROUP BY rtype HAVING rtype is not null
+	</select>
+
+	<select id="queryAllProvince" resultMap="BaseResultMap">
+		SELECT
+			count(*) as value,province as name,online_time,offline_time
+		FROM log_robot_online_info WHERE offline_time IS NULL
+		GROUP BY
+			province
+	</select>
+
+	<sql id="Base_date">
+		<where>
+			<if test="onlineTime != null and onlineTime != '' ">
+				and (online_time <![CDATA[ <= ]]> #{offlineTime} and offline_time <![CDATA[ > ]]> #{onlineTime})
+			</if>
+			<if test="offlineTime != null and offlineTime != '' ">
+				or (online_time <![CDATA[ <= ]]> #{offlineTime} and offline_time is null)
+			</if>
+			<if test="offlineTime == null and offlineTime == '' ">
+				and offline_time is null
+			</if>
+		</where>
+	</sql>
+	
+	<sql id="Base_rtype">
+		<where>
+			<if test="arr != null and arr != '' ">
+				rtype in
+				<foreach item="item" index="index" collection="arr"
+			      open="(" separator="," close=")">
+			        #{item}
+			   </foreach>
+			</if>
+		</where>
+	</sql>
+	
+	<select id="queryDate" resultMap="BaseResultMap">
+		SELECT
+			COUNT(ta.rid) AS
+		VALUE
+			,
+			ta.province AS NAME
+		FROM
+			(
+				SELECT DISTINCT
+					rid,
+					province
+				FROM
+					log_robot_online_info <include refid = "Base_date" />
+			) AS ta
+		GROUP BY
+			province
+	</select>
+	
+	<select id="queryByRtype" resultMap="BaseResultMap">
+		SELECT COUNT(ta.rid) as value, ta.province as name FROM
+		(
+		  SELECT
+		  DISTINCT rid,
+		  province
+		  FROM
+		  log_robot_online_info
+		<include refid="Base_rtype"/> and offline_time is null) as ta GROUP BY province	
+	</select>
+	
+	<select id="timeAndRtype" resultMap="BaseResultMap">
+		SELECT COUNT(ta.rid) as value, ta.province as name FROM
+		(
+		  SELECT
+		  DISTINCT rid,
+		  province
+		  FROM
+		  log_robot_online_info
+		<include refid="Base_rtype"/>
+		<if test="onlineTime != null and onlineTime != '' ">
+			and (online_time <![CDATA[ <= ]]> #{offlineTime} and offline_time <![CDATA[ > ]]> #{onlineTime})
+		</if>
+		<if test="offlineTime != null and offlineTime != '' ">
+			or (online_time <![CDATA[ <= ]]> #{offlineTime} and offline_time is null)
+		</if>
+		<if test="offlineTime == null and offlineTime == '' ">
+			and offline_time is null
+		</if>
+		) as ta		
+		GROUP BY
+			province
+	</select>
+	
+</mapper>

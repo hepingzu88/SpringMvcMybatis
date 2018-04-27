@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yyd.yun.dao.TbStoryResTagMapper">
+
+  <resultMap id="BaseResultMap" type="yyd.yun.beans.TbStoryResTag">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="story_res_id" jdbcType="INTEGER" property="storyResId" />
+    <result column="tag_id" jdbcType="INTEGER" property="tagId" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, story_res_id, tag_id
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_story_res_tag
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectStoryResTag" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_story_res_tag
+    <where>
+    	<if test="id != null">
+    		id = #{id}
+    	</if>
+    	<if test="storyResId != null">
+    		story_res_id = #{storyResId}
+    	</if>
+    	<if test="tagId != null">
+    		tag_id = #{tagId}
+    	</if>
+    </where>
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_story_res_tag
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <delete id="deleteByStoryResId" parameterType="java.lang.Integer">
+    delete from tb_story_res_tag
+    where story_res_id = #{StoryResId,jdbcType=INTEGER}
+  </delete>
+  
+  <delete id="deleteStoryTagId" parameterType="java.lang.Integer">
+    delete from tb_story_res_tag
+    where tag_id = #{tagId,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="yyd.yun.beans.TbStoryResTag">
+    insert into tb_story_res_tag (id, story_res_id, tag_id
+      )
+    values (#{id,jdbcType=INTEGER}, #{storyResId,jdbcType=INTEGER}, #{tagId,jdbcType=INTEGER}
+      )
+  </insert>
+  
+  <insert id="insertSelective" parameterType="yyd.yun.beans.TbStoryResTag">
+    insert into tb_story_res_tag
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="storyResId != null">
+        story_res_id,
+      </if>
+      <if test="tagId != null">
+        tag_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="storyResId != null">
+        #{storyResId,jdbcType=INTEGER},
+      </if>
+      <if test="tagId != null">
+        #{tagId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="yyd.yun.beans.TbStoryResTag">
+    update tb_story_res_tag
+    <set>
+      <if test="storyResId != null">
+        story_res_id = #{storyResId,jdbcType=INTEGER},
+      </if>
+      <if test="tagId != null">
+        tag_id = #{tagId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="yyd.yun.beans.TbStoryResTag">
+    update tb_story_res_tag
+    set story_res_id = #{storyResId,jdbcType=INTEGER},
+      tag_id = #{tagId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

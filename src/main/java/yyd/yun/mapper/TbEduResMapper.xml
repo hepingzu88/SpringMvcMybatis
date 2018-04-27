@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yyd.yun.dao.TbEduResMapper">
+
+  <resultMap id="BaseResultMap" type="yyd.yun.beans.TbEduRes">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="year" jdbcType="VARCHAR" property="year" />
+    <result column="level" jdbcType="VARCHAR" property="level" />
+    <result column="subject" jdbcType="VARCHAR" property="subject" />
+    <result column="grade_id" jdbcType="INTEGER" property="gradeId" />
+    <result column="semester_id" jdbcType="INTEGER" property="semesterId" />
+    <result column="age_id" jdbcType="INTEGER" property="ageId" />
+    <result column="version_id" jdbcType="INTEGER" property="versionId" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="category_id" jdbcType="INTEGER" property="categoryId" />
+    <result column="course" jdbcType="VARCHAR" property="course" />
+    <result column="is_tagged" jdbcType="INTEGER" property="isTagged" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, name, year, level, subject, grade_id, semester_id, version_id, url, category_id, age_id,course,
+    is_tagged
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_edu_res
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectTbEduRes" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_edu_res
+    <where>
+    	<if test="id != null">
+    		id = #{id}
+    	</if>
+    	<if test="categoryId != null">
+    		category_id = #{categoryId}
+    	</if>
+    </where>
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_edu_res
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="yyd.yun.beans.TbEduRes">
+    insert into tb_edu_res (id, name, year, 
+      level, subject, grade_id, 
+      semester_id, version_id, url, 
+      category_id, is_tagged,course,age_id)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{year,jdbcType=TIME}, 
+      #{level,jdbcType=VARCHAR}, #{subject,jdbcType=VARCHAR}, #{gradeId,jdbcType=INTEGER}, 
+      #{semesterId,jdbcType=INTEGER}, #{versionId,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, 
+      #{categoryId,jdbcType=INTEGER}, #{isTagged,jdbcType=VARCHAR},#{course,jdbcType=VARCHAR},#{ageId,jdbcType=INTEGER})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="yyd.yun.beans.TbEduRes">
+    insert into tb_edu_res
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="year != null">
+        year,
+      </if>
+      <if test="level != null">
+        level,
+      </if>
+      <if test="subject != null">
+        subject,
+      </if>
+      <if test="gradeId != null">
+        grade_id,
+      </if>
+      <if test="semesterId != null">
+        semester_id,
+      </if>
+      <if test="versionId != null">
+        version_id,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="categoryId != null">
+        category_id,
+      </if>
+      <if test="isTagged != null">
+        is_tagged,
+      </if>
+      <if test="ageId != null">
+        age_id,
+      </if>
+      <if test="course != null">
+        course,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null">
+        #{year,jdbcType=TIME},
+      </if>
+      <if test="level != null">
+        #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null">
+        #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="gradeId != null">
+        #{gradeId,jdbcType=INTEGER},
+      </if>
+      <if test="semesterId != null">
+        #{semesterId,jdbcType=INTEGER},
+      </if>
+      <if test="versionId != null">
+        #{versionId,jdbcType=INTEGER},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null">
+        #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="isTagged != null">
+        #{isTagged,jdbcType=VARCHAR},
+      </if>
+       <if test="ageId != null">
+        #{ageId,jdbcType=INTEGER},
+      </if>
+      <if test="course != null">
+       #{course,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="yyd.yun.beans.TbEduRes">
+    update tb_edu_res
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="year != null">
+        year = #{year,jdbcType=TIME},
+      </if>
+      <if test="level != null">
+        level = #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null">
+        subject = #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="gradeId != null">
+        grade_id = #{gradeId,jdbcType=INTEGER},
+      </if>
+      <if test="semesterId != null">
+        semester_id = #{semesterId,jdbcType=INTEGER},
+      </if>
+      <if test="versionId != null">
+        version_id = #{versionId,jdbcType=INTEGER},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null">
+        category_id = #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="isTagged != null">
+        is_tagged = #{isTagged,jdbcType=VARCHAR},
+      </if>
+       <if test="ageId != null">
+        age_id = #{ageId,jdbcType=INTEGER},
+      </if>
+       <if test="course != null">
+        course = #{course,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="yyd.yun.beans.TbEduRes">
+    update tb_edu_res
+    set name = #{name,jdbcType=VARCHAR},
+      year = #{year,jdbcType=TIME},
+      level = #{level,jdbcType=VARCHAR},
+      subject = #{subject,jdbcType=VARCHAR},
+      grade_id = #{gradeId,jdbcType=INTEGER},
+      semester_id = #{semesterId,jdbcType=INTEGER},
+      version_id = #{versionId,jdbcType=INTEGER},
+      url = #{url,jdbcType=VARCHAR},
+      category_id = #{categoryId,jdbcType=INTEGER},
+      is_tagged = #{isTagged,jdbcType=VARCHAR},
+      age_id = #{ageId,jdbcType=INTEGER},
+      course = #{course,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+</mapper>

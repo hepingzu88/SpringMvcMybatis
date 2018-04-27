@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yyd.yun.dao.AffectiveDao">
+	<resultMap type="yyd.yun.beans.Affective" id="BaseResult">
+		<result column="id"			 	property="id" 					jdbcType="INTEGER"/>
+		<result column="affective_name" property="affectiveName" 		jdbcType="VARCHAR"/>
+		<result column="operator_id" 	property="operatorId"  			jdbcType="BIGINT"/>
+		<result column="create_date" 	property="createDate"  			jdbcType="TIMESTAMP"/>
+		<result column="update_date" 	property="updateDate"  			jdbcType="TIMESTAMP"/>
+	</resultMap>
+
+	<sql id="column">
+		id,affective_name,operator_id,create_date,update_date
+	</sql>
+
+	<insert id="addAffective">
+		insert into affective(affective_name,operator_id,create_date) value(#{affectiveName},#{operatorId},now())
+	</insert>
+	
+	<select id="findAffectiveList" resultMap="BaseResult">
+		select <include refid="column"/> from affective 
+		<!-- <if test="Affective != null and Affective != '' "> -->
+			<where>
+				operator_id = #{operatorId}
+				<if test="id != null and id != ''">
+					and id = #{id}
+				</if>
+				<if test="affectiveName != null and affectiveName != ''">
+					and affective_name = #{affectiveName}
+				</if>
+			</where>
+		<!-- </if> -->
+	</select>
+	
+	<select id="findAffective" resultMap="BaseResult">
+		select <include refid="column"/> from affective where operator_id = #{operatorId} and affective_id = #{id}
+	</select>
+	
+	<delete id="deleteAffective">
+		delete from affective where id = #{id} and operator_id = #{operatorId}
+	</delete>
+	
+	
+</mapper>

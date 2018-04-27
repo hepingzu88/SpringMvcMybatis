@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yyd.yun.dao.TbMusicSingerMapper">
+  <resultMap id="BaseResultMap" type="yyd.yun.beans.TbMusicSinger">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="singer" jdbcType="VARCHAR" property="singer" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, singer
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_music_singer
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_music_singer
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="yyd.yun.beans.TbMusicSinger">
+    insert into tb_music_singer (id, singer)
+    values (#{id,jdbcType=INTEGER}, #{singer,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="yyd.yun.beans.TbMusicSinger">
+    insert into tb_music_singer
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="singer != null">
+        singer,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="singer != null">
+        #{singer,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="yyd.yun.beans.TbMusicSinger">
+    update tb_music_singer
+    <set>
+      <if test="singer != null">
+        singer = #{singer,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="yyd.yun.beans.TbMusicSinger">
+    update tb_music_singer
+    set singer = #{singer,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

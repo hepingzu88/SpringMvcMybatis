@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yyd.yun.dao.TbMusicResMapper">
+
+  <resultMap id="BaseResultMap" type="yyd.yun.beans.TbMusicRes">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="song_id" jdbcType="INTEGER" property="songId" />
+    <result column="singer_id" jdbcType="INTEGER" property="singerId" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="music_category_id" jdbcType="INTEGER" property="musicCategoryId" />
+    <result column="age_id" jdbcType="INTEGER" property="ageId" />
+    <result column="category_id" jdbcType="INTEGER" property="categoryId" />
+    <result column="is_tagged" jdbcType="INTEGER" property="isTagged" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, song_id, singer_id, url, music_category_id, age_id, category_id,is_tagged
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_music_res
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="getTbMusicRes" resultMap="BaseResultMap">
+  	select 
+    	<include refid="Base_Column_List"/>
+    	from tb_music_res
+    <where>
+	    <if test="id != null and id > 0">
+	  	 	and id = #{id}
+	  	</if>
+	  	<if test="songId != null and songId > 0">
+	  		and	song_id = #{songId}
+	  	</if>
+	  	<if test="singerId != null and singerId > 0">
+	  		and	singer_id = #{singerId}
+	  	</if>
+	  	<if test="musicCategoryId != null and musicCategoryId > 0">
+	  		and	music_category_id = #{musicCategoryId}
+	  	</if>
+	  	<if test="ageId != null and ageId > 0">
+	  		and	age_id = #{ageId}
+	  	</if>
+	  	<if test="categoryId != null and categoryId > 0">
+	  		and	category_id = #{categoryId}
+	  	</if>
+    </where>
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_music_res
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="yyd.yun.beans.TbMusicRes">
+    insert into tb_music_res (id, song_id, singer_id, 
+      url, music_category_id, age_id, 
+      category_id)
+    values (#{id,jdbcType=INTEGER}, #{songId,jdbcType=INTEGER}, #{singerId,jdbcType=INTEGER}, 
+      #{url,jdbcType=VARCHAR}, #{musicCategoryId,jdbcType=INTEGER}, #{ageId,jdbcType=INTEGER}, 
+      #{categoryId,jdbcType=INTEGER})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="yyd.yun.beans.TbMusicRes">
+    insert into tb_music_res
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="songId != null">
+        song_id,
+      </if>
+      <if test="singerId != null">
+        singer_id,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="musicCategoryId != null">
+        music_category_id,
+      </if>
+      <if test="ageId != null">
+        age_id,
+      </if>
+      <if test="categoryId != null">
+        category_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="songId != null">
+        #{songId,jdbcType=INTEGER},
+      </if>
+      <if test="singerId != null">
+        #{singerId,jdbcType=INTEGER},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="musicCategoryId != null">
+        #{musicCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="ageId != null">
+        #{ageId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null">
+        #{categoryId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="yyd.yun.beans.TbMusicRes">
+    update tb_music_res
+    <set>
+      <if test="songId != null">
+        song_id = #{songId,jdbcType=INTEGER},
+      </if>
+      <if test="singerId != null">
+        singer_id = #{singerId,jdbcType=INTEGER},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="musicCategoryId != null">
+        music_category_id = #{musicCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="ageId != null">
+        age_id = #{ageId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null">
+        category_id = #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="isTagged != null">
+      	is_tagged = #{isTagged,jdbcType=INTEGER},	
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="yyd.yun.beans.TbMusicRes">
+    update tb_music_res
+    set song_id = #{songId,jdbcType=INTEGER},
+      singer_id = #{singerId,jdbcType=INTEGER},
+      url = #{url,jdbcType=VARCHAR},
+      music_category_id = #{musicCategoryId,jdbcType=INTEGER},
+      age_id = #{ageId,jdbcType=INTEGER},
+      category_id = #{categoryId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="yyd.yun.dao.RecordHandleLogDao">
+	<resultMap id="RecordHandleLogBaseResul" type="yyd.yun.beans.RecordHandleLog">
+        <result     column="id" 		property="id" 			/>
+        <result column="user_name"    	property="userName" 	/>
+        <result column="reuqest_ip"   	property="reuqestIp"    />
+        <result column="class_name"  	property="className" 	/>
+        <result column="method_name" 	property="methodName" 	/>
+        <result column="start_time" 	property="startTime"    />
+        <result column="end_time" 		property="endTime" 		/>
+        <result column="action_type" 	property="actionType" 	/>
+        <result column="params" 		property="params" 		/>
+        <result column="detail" 		property="detail" 	    />
+        <result column="state" 			property="state" 	    />
+    </resultMap>
+    
+    <insert id="addRecordHandleLog">
+    	insert into record_handle_log(user_name,reuqest_ip,class_name,method_name,start_time,end_time,action_type,params,detail,state)
+    	value(#{userName},#{reuqestIp},#{className},#{methodName},#{startTime},#{endTime},#{actionType},#{params},#{detail},#{state})
+    </insert>
+
+
+	<sql id="Base_column">
+		id,user_name,reuqest_ip,method_name,start_time,end_time,action_type,params,detail,state
+	</sql>
+
+	<select id="selectRecordHandleLog" resultMap="RecordHandleLogBaseResul">
+		select <include refid="Base_column"/> from record_handle_log 
+		<where>
+			<if test="id != null and id != '' ">
+				and id = #{id}
+			</if>
+			<if test="userName != null and userName != '' ">
+				and user_name = #{userName}
+			</if>
+			<if test="startTime != null and startTime != '' ">
+				and start_time  <![CDATA[ >= ]]> #{startTime}  
+			</if>
+			<if test="endTime != null and endTime != '' ">
+				and end_time  <![CDATA[ <= ]]> #{endTime}  
+			</if>
+		</where>
+	</select>
+	
+	<delete id="delete">
+		delete from record_handle_log  <include refid="Base_id"/> 
+	</delete>
+	
+	<sql id="Base_id">
+		<if test="arrys != null and arrys != '' ">
+			where id in
+			<foreach item="item" index="index" collection="arrys"
+		      open="(" separator="," close=")">
+		        #{item}
+		   </foreach>
+		</if>
+	</sql>
+</mapper>

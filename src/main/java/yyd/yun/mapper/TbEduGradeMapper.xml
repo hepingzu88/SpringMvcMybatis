@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yyd.yun.dao.TbEduGradeMapper">
+
+  <resultMap id="BaseResultMap" type="yyd.yun.beans.TbEduGrade">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="grade" jdbcType="VARCHAR" property="grade" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, grade
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_edu_grade
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectGrade"  resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_edu_grade
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_edu_grade
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="yyd.yun.beans.TbEduGrade">
+    insert into tb_edu_grade (id, grade)
+    values (#{id,jdbcType=INTEGER}, #{grade,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="yyd.yun.beans.TbEduGrade">
+    insert into tb_edu_grade
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="grade != null">
+        grade,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="grade != null">
+        #{grade,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="yyd.yun.beans.TbEduGrade">
+    update tb_edu_grade
+    <set>
+      <if test="grade != null">
+        grade = #{grade,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="yyd.yun.beans.TbEduGrade">
+    update tb_edu_grade
+    set grade = #{grade,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

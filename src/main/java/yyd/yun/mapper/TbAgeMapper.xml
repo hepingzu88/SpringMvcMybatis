@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yyd.yun.dao.TbAgeMapper">
+
+  <resultMap id="BaseResultMap" type="yyd.yun.beans.TbAge">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="age" jdbcType="VARCHAR" property="age" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, age
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_age
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+   <select id="listTbAge" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_age
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_age
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="yyd.yun.beans.TbAge">
+    insert into tb_age (id, age)
+    values (#{id,jdbcType=INTEGER}, #{age,jdbcType=VARCHAR})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="yyd.yun.beans.TbAge">
+    insert into tb_age
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="age != null">
+        age,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="age != null">
+        #{age,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="yyd.yun.beans.TbAge">
+    update tb_age
+    <set>
+      <if test="age != null">
+        age = #{age,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="yyd.yun.beans.TbAge">
+    update tb_age
+    set age = #{age,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

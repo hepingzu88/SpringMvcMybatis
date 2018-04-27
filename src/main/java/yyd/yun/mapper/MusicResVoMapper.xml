@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yyd.yun.dao.MusicResVoDao">
+
+  <resultMap id="BaseResultMap" type="yyd.yun.beans.MusicResVo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="song_id" jdbcType="INTEGER" property="songId" />
+    <result column="singer_id" jdbcType="INTEGER" property="singerId" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="music_category_id" jdbcType="INTEGER" property="musicCategoryId" />
+    <result column="age_id" jdbcType="INTEGER" property="ageId" />
+    <result column="category_id" jdbcType="INTEGER" property="categoryId" />
+    <result column="is_tagged" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    m.id,m.song_id as songId, m.singer_id as singerId, m.url, m.music_category_id as musicCategory, m.age_id as ageId, m.category_id as cateGory,m.is_tagged as state
+  </sql>
+  
+  <sql id="Column_List">
+    id,song_id, singer_id , url, music_category_id , age_id, category_id,is_tagged
+  </sql>
+  
+  <sql id="Base_Column">
+    m.id,m.song_id as songId, m.singer_id as singerId,m.is_tagged as state
+  </sql>
+  
+  <select id="selectMusicResVo" resultMap="BaseResultMap">
+	  	SELECT
+		<include refid="Base_Column"/>,s.id,s.song,sin.id,sin.singer,c.id,c.category,a.id,a.age
+	FROM tb_music_res
+	m	
+	LEFT JOIN tb_music_song s ON s.id = m.song_id
+	LEFT JOIN tb_music_singer sin ON m.singer_id = sin.id
+	LEFT JOIN tb_music_category c ON m.music_category_id = c.id
+	LEFT JOIN tb_age a ON m.age_id = a.id
+	<where>
+		<if test="song != null and song != '' ">
+			and song like concat(concat('%',#{song}),'%')
+		</if>
+		<if test="musicCategoryId != null and musicCategoryId > 0"> 
+		 and music_category_id = #{musicCategoryId}
+		</if>
+		<if test="isTagged != null and isTagged >= 0"> 
+		 and is_tagged = #{isTagged}
+		</if>
+		</where>
+  </select>
+  
+<!--   (select <include refid="Column_List"/> from tb_music_res
+		WHERE 1=1
+		<if test="musicCategoryId != null and musicCategoryId > 0"> 
+		 and music_category_id = #{musicCategoryId}
+		</if>
+		<if test="isTagged != null and isTagged >= 0"> 
+		 and is_tagged = #{isTagged}
+		</if>
+	) -->
+  
+</mapper>

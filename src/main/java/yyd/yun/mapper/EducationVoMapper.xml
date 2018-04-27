@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yyd.yun.dao.EducationVoDao">
+
+  <resultMap id="BaseResultMap" type="yyd.yun.beans.EducationVo">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="year" jdbcType="VARCHAR" property="year" />
+    <result column="level" jdbcType="VARCHAR" property="level" />
+    <result column="subject" jdbcType="VARCHAR" property="subject" />
+    <result column="grade_id" jdbcType="INTEGER" property="gradeId" />
+    <result column="semester_id" jdbcType="INTEGER" property="semesterId" />
+    <result column="age_id" jdbcType="INTEGER" property="ageId" />
+    <result column="version_id" jdbcType="INTEGER" property="versionId" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="category_id" jdbcType="INTEGER" property="categoryId" />
+    <result column="course" jdbcType="VARCHAR" property="course" />
+    <result column="is_tagged" jdbcType="INTEGER" property="state" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    e.id,e.name,e.year,e.level ,e.subject,e.grade_id as gradeId,e.age_id as ageId,course,
+    e.semester_id as semesterId,e.version_id as versionId,e.url,e.category_id as categoryId ,e.is_tagged as state
+  </sql>
+  
+   <sql id="Base_List">
+    id, name, year, level, subject, grade_id, semester_id, version_id, url, category_id, age_id,course,
+    is_tagged
+   </sql>
+  
+  <select id="selectEducationVo" resultMap="BaseResultMap">
+	  SELECT <include refid="Base_Column_List"/>,v.id,v.version,s.id,s.semester,g.id,g.grade
+	FROM tb_edu_res e
+	LEFT JOIN tb_edu_version v ON v.id = e.version_id
+	LEFT JOIN tb_edu_semester s ON e.semester_id = s.id
+	LEFT JOIN tb_edu_grade g ON e.grade_id = g.id
+	<where>
+		<if test="name != null and name != '' ">
+			and name like concat(concat('%',#{name}),'%')
+		</if>
+		<if test="isTagged != null and isTagged >= 0"> 
+		 	and is_tagged = #{isTagged}
+		</if>
+		<if test="versionId != null and versionId >= 0"> 
+		 	and version_id = #{versionId}
+		</if>
+	</where>
+  </select>
+  <!-- (select <include refid="Base_List"/> from tb_edu_res
+		WHERE 1=1
+		<if test="isTagged != null and isTagged >= 0"> 
+		 and is_tagged = #{isTagged}
+		</if>
+		<if test="versionId != null and versionId >= 0"> 
+		 and version_id = #{versionId}
+		</if>
+	) -->
+  
+  
+</mapper>

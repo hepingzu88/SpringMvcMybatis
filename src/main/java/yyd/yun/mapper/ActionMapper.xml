@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yyd.yun.dao.ActionDao">
+	<resultMap type="yyd.yun.beans.Action" id="BaseResult">
+		<result column="id"			 property="id" 			jdbcType="INTEGER"/>
+		<result column="action" 	 property="action" 		jdbcType="VARCHAR"/>
+		<result column="operator_id" property="operatorId"  jdbcType="BIGINT"/>
+		<result column="create_date" property="createDate"  jdbcType="TIMESTAMP"/>
+		<result column="update_date" property="updateDate"  jdbcType="TIMESTAMP"/>
+	</resultMap>
+
+	<sql id="column">
+		id,action,operator_id,create_date
+	</sql>
+
+	<!--   useGeneratedKeys="true" keyProperty="id" 返回主键-->
+	<insert id="addAction">
+		insert into action(action,operator_id,create_date) value(#{action},#{operatorId},now())
+	</insert>
+	
+	<select id="queryByIdAction" resultMap="BaseResult">
+		select <include refid="column"/> from action where operator_id = #{operatorId}
+	</select>
+	
+	<select id="findByName" resultMap="BaseResult">
+		select <include refid="column"/> from action where operator_id = #{operatorId} and action = #{actionName}
+	</select>
+	
+	<select id="findActionById" resultMap="BaseResult">
+		select <include refid="column"/> from action 
+		<where>
+			<if test="operatorId != null and operatorId != ''">
+				and operator_id = #{operatorId}
+			</if>
+		    <if test="action != null and action != ''">
+				and action = #{action}
+			</if>
+			<if test="id != null and id != ''">
+				and id = #{id}
+			</if>
+		</where>
+	</select>
+	
+	<delete id="delAction">
+		delete from action where id = #{id} and operator_id = #{operatorId}
+	</delete>
+	
+	<!-- 批量插入   batchInsert -->
+	<!-- <insert id="batchInsert">
+		insert into action(action,operator_id,create_date) 
+		value 
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.action},#{item.operatorId},now())
+		</foreach>
+	</insert> -->
+	
+	
+</mapper>

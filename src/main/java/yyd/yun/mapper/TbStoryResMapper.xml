@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yyd.yun.dao.TbStoryResMapper">
+
+  <resultMap id="BaseResultMap" type="yyd.yun.beans.TbStoryRes">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="album_id" jdbcType="INTEGER" property="albumId" />
+    <result column="story_category_id" jdbcType="INTEGER" property="storyCategoryId" />
+    <result column="age_id" jdbcType="INTEGER" property="ageId" />
+    <result column="category_id" jdbcType="INTEGER" property="categoryId" />
+    <result column="is_tagged" jdbcType="INTEGER" property="isTagged" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, name, url, album_id, story_category_id, age_id, category_id,is_tagged
+  </sql>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_story_res
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="listTbStoryRes" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_story_res
+    <where>
+    	<if test="id != null">
+    	  	 id = #{id}
+    	</if>
+    	<if test="name != null">
+    		name = #{name}
+    	</if>
+    	<if test="categoryId != null">
+    		and category_id = #{categoryId}
+    	</if>
+    </where>
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_story_res
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  
+  <insert id="insert" parameterType="yyd.yun.beans.TbStoryRes">
+    insert into tb_story_res (id, name, url, 
+      album_id, story_category_id, age_id, 
+      category_id,is_tagged)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{albumId,jdbcType=INTEGER}, #{storyCategoryId,jdbcType=INTEGER}, #{ageId,jdbcType=INTEGER}, 
+      #{categoryId,jdbcType=INTEGER},#{isTagged,jdbcType=INTEGER})
+  </insert>
+  
+  <insert id="insertSelective" parameterType="yyd.yun.beans.TbStoryRes">
+    insert into tb_story_res
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="albumId != null">
+        album_id,
+      </if>
+      <if test="storyCategoryId != null">
+        story_category_id,
+      </if>
+      <if test="ageId != null">
+        age_id,
+      </if>
+      <if test="categoryId != null">
+        category_id,
+      </if>
+      <if test="isTagged != null">
+        is_tagged,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="albumId != null">
+        #{albumId,jdbcType=INTEGER},
+      </if>
+      <if test="storyCategoryId != null">
+        #{storyCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="ageId != null">
+        #{ageId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null">
+        #{categoryId,jdbcType=INTEGER},
+      </if>
+      <if test="isTagged != null">
+        #{isTagged,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="yyd.yun.beans.TbStoryRes">
+    update tb_story_res
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="albumId != null">
+        album_id = #{albumId,jdbcType=INTEGER},
+      </if>
+      <if test="storyCategoryId != null">
+        story_category_id = #{storyCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="ageId != null">
+        age_id = #{ageId,jdbcType=INTEGER},
+      </if>
+      <if test="categoryId != null">
+        category_id = #{categoryId,jdbcType=INTEGER},
+      </if>
+       <if test="isTagged != null">
+        is_tagged = #{isTagged,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="yyd.yun.beans.TbStoryRes">
+    update tb_story_res
+    set name = #{name,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      album_id = #{albumId,jdbcType=INTEGER},
+      story_category_id = #{storyCategoryId,jdbcType=INTEGER},
+      age_id = #{ageId,jdbcType=INTEGER},
+      category_id = #{categoryId,jdbcType=INTEGER},
+       is_tagged = #{isTagged,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

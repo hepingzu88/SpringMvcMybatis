@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="yyd.yun.dao.SemanticInfoDao" >
+	<resultMap type="yyd.yun.beans.SemanticInfo" id="BaseResultMap">
+		<result column="id"  			property="id"  			/>
+		<result column="text"  			property="text"  		/>
+		<result column="answer"         property="answer"		/>
+		<result column="scene_id"   	property="sceneId"  	/>
+		<result column="intent_id"   	property="intentId"  	/>
+		<result column="semantic"   	property="semantic"  	/>
+		<result column="operator_id"  	property="operatorId"  	/>
+		<result column="sentiment"  	property="sentiment"  	/>
+		<result column="apply_age" 		property="applyAge" 	/>
+		<result column="similarity_id"  property="similarityId" />
+		<result column="create_date"    property="createDate"	/>
+		<result column="update_date"    property="updateDate"	/>
+	</resultMap>
+	
+	<sql id="base">
+		semantic.id,semantic.text,semantic.answer,semantic.scene_id  as sceneId,
+		semantic.intent_id as intentId,semantic.semantic,semantic.operator_id as operatorId,
+		semantic.sentiment as sentiment,semantic.apply_age as applyAge,semantic.similarity_id as similarityId,
+		semantic.create_date as createDate,semantic.update_date as updateDate
+	</sql>
+	
+	<select id="selectSemantic" resultMap="BaseResultMap">
+		SELECT
+			<include refid="base"/>
+		FROM
+			semantic
+		WHERE
+		id = #{id}
+		AND operator_id = #{operatorId}
+	</select>
+	
+	<select id="findById" resultMap="BaseResultMap">
+		SELECT
+			<include refid="base"/>,scene.scene,scene.id,intent.intent as intent,intent.id as intentId
+			from 
+			semantic
+			left join scene on scene.id = semantic.scene_id LEFT JOIN 
+			intent on semantic.intent_id = intent.id
+		where 
+		semantic.operator_id = #{operatorId} and semantic.id = #{id}
+	
+		<!-- FROM
+			semantic
+			,scene,
+			intent
+		WHERE
+			scene.id = semantic.scene_id
+		  and semantic.intent_id = intent.id and
+		semantic.operator_id = #{operatorId}
+		AND semantic.id = #{id} -->
+	</select>
+	
+	<sql id="find_base">
+		semantic.id,semantic.text,semantic.answer,semantic.scene_id  as sceneId,
+		semantic.intent_id as intentId,semantic.semantic,semantic.operator_id as operatorId,
+		semantic.sentiment as sentiment,semantic.apply_age as applyAge,semantic.similarity_id as similarityId
+	</sql>
+	
+	<select id="findSemantic" resultMap="BaseResultMap">
+		SELECT
+			<include refid="base"/>,scene.scene,intent.intent as intent
+		FROM
+			<!-- (
+			SELECT
+				*
+			FROM
+				semantic
+			WHERE
+				operator_id = #{operatorId} and id = similarity_id
+				 <if test="sceneId > 0">
+					and scene_id = #{sceneId}
+				</if>
+				<if test="text != null and text != '' ">
+					and text like concat(concat('%',#{text}),'%')
+				</if>
+		)  -->semantic
+		LEFT JOIN scene ON scene.id = semantic.scene_id
+		LEFT JOIN intent ON semantic.intent_id = intent.id
+		<where>
+			<if test="sceneId > 0">
+				and scene_id = #{sceneId}
+			</if>
+			<if test="text != null and text != '' ">
+				and text like concat(concat('%',#{text}),'%')
+			</if>
+		</where>
+		ORDER BY semantic.id asc
+	</select>
+	
+	
+	<select id="exportSemantic" resultMap="BaseResultMap">
+		SELECT
+			<include refid="base"/>,scene.scene,intent.intent as intent
+		FROM
+			(
+			SELECT
+				*
+			FROM
+				semantic
+			WHERE
+				operator_id = #{operatorId}
+				 <if test="sceneId > 0">
+					and scene_id = #{sceneId}
+				</if>
+				<if test="text != null and text != '' ">
+					and text like concat(concat('%',#{text}),'%')
+				</if>
+		) semantic
+		LEFT JOIN scene ON scene.id = semantic.scene_id
+		LEFT JOIN intent ON semantic.intent_id = intent.id
+		ORDER BY semantic.id asc
+	</select>
+	
+	<!-- <select id="findSemantic" resultMap="BaseResultMap">
+		SELECT
+			<include refid="base"/>
+		FROM
+			semantic
+		WHERE
+		semantic.id = semantic.similarity_id
+		AND semantic.operator_id = #{operatorId} 
+		<if test="sceneId > 0">
+			and scene_id = #{sceneId}
+		</if>
+		<if test="text != null and text != '' ">
+			and text like concat(concat('%',#{text}),'%')
+		</if>
+		ORDER BY id asc
+	</select> -->
+	
+	
+</mapper>

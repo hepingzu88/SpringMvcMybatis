@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="yyd.yun.dao.SemanticDao" >
+	<resultMap type="yyd.yun.beans.Semantic" id="BaseResultMap">
+		<result column="id"  			property="id"  			/>
+		<result column="text"  			property="text"  		/>
+		<result column="answer"         property="answer"		/>
+		<result column="scene_id"   	property="sceneId"  	/>
+		<result column="intent_id"   	property="intentId"  	/>
+		<result column="semantic"   	property="semantic"  	/>
+		<result column="operator_id"  	property="operatorId"  	/>
+		<result column="sentiment"  	property="sentiment"  	/>
+		<result column="apply_age" 		property="applyAge" 	/>
+		<result column="similarity_id"  property="similarityId" />
+		<result column="create_date"    property="createDate"	/>
+		<result column="update_date"    property="updateDate"	/>
+	</resultMap>
+
+	<sql id="Base_column">
+		id,text,answer,scene_id,intent_id,semantic,operator_id,sentiment,apply_age,similarity_id,create_date,update_date
+	</sql>
+
+	<insert id="add" useGeneratedKeys="true" keyProperty="id">
+		insert into semantic(text,scene_id,operator_id,intent_id,semantic,similarity_id,sentiment,apply_age,answer,create_date) 
+		value(#{text},#{sceneId},#{operatorId},#{intentId},#{semantic},#{similarityId},#{sentiment},#{applyAge},#{answer},now())
+	</insert>
+
+	<select id="findSemantic" resultMap="BaseResultMap">
+		select <include refid="Base_column"/> from semantic where id = similarity_id and operator_id =#{operatorId}
+	</select>
+	
+	<!-- <select id="findIntent" resultMap="BaseResultMap">
+		select intent from semantic group by intent
+	</select> -->
+	
+	<select id="findByIdAndUserId" resultMap="BaseResultMap">
+		SELECT
+			<include refid="Base_column"/>
+		FROM
+			semantic
+		WHERE similarity_id = #{id} and operator_id = #{operatorId} ORDER BY id asc
+	</select>
+	
+	<update id="updateSemantic">
+		update semantic
+		<set>
+		  <if test="similarityId == null">similarity_id=#{id},</if>
+	      <if test="text != null">text=#{text},</if>
+	      <if test="answer != null">answer=#{answer},</if>
+	      <if test="semantic != null">semantic=#{semantic},</if>
+	      <if test="intentId != null">intent_id=#{intentId},</if>
+	      <if test="similarityId != null">similarity_id=#{similarityId},</if>
+	      <if test="operatorId != null">operator_id=#{operatorId},</if>
+	      <if test="applyAge != null">apply_age=#{applyAge},</if>
+	      <if test="sentiment != null">sentiment = #{sentiment},</if>
+	      update_date = now()
+	    </set>
+  			where id=#{id}
+	</update>
+	
+	<update id="updateLabelSemantic">
+		update semantic
+		<set>
+	      <if test="text != null">text=#{text},</if>
+	      <if test="answer != null">answer = #{answer},</if>
+	      <if test="semantic != null">semantic = #{semantic},</if>
+	      update_date = now()
+	    </set>
+  			where id=#{id}
+	</update>
+	
+	
+	<update id="updateSemanticInfo">
+		update semantic
+		<set>
+	     <!--  <if test="text != null and text != ''">text=#{text},</if>
+	      <if test="answer != null and answer != ''">answer=#{answer},</if> -->
+	     <!--  <if test="semantic != null and semantic != ''">semantic=#{semantic},</if> -->
+	      <if test="sceneId != null and sceneId != ''">scene_id=#{sceneId},</if>
+	      <if test="intentId != null and intentId != ''">intent_id=#{intentId},</if>
+	      <if test="similarityId != null and similarityId != ''">similarity_id=#{similarityId},</if>
+	      <if test="operatorId != null and operatorId != ''">operator_id=#{operatorId},</if>
+	      <if test="applyAge != null and applyAge != ''">apply_age=#{applyAge},</if>
+	      <if test="sentiment != null and sentiment != ''">sentiment = #{sentiment},</if>
+	   	   update_date = now()
+	    </set>
+  			where similarity_id=#{id}
+	</update>
+	
+	
+	<update id="updateSemanticJson">
+		update semantic
+		<set>
+	      <if test="text != null and text != ''">text=#{text},</if>
+	      <if test="answer != null and answer != ''">answer=#{answer},</if>
+	      <if test="semantic != null and semantic != ''">semantic=#{semantic},</if>
+	      <if test="sceneId != null and sceneId != ''">scene_id=#{sceneId},</if>
+	      <if test="intentId != null and intentId != ''">intent_id=#{intentId},</if>
+	      <if test="similarityId != null and similarityId != ''">similarity_id=#{similarityId},</if>
+	      <if test="operatorId != null and operatorId != ''">operator_id=#{operatorId},</if>
+	      <if test="applyAge != null and applyAge != ''">apply_age=#{applyAge},</if>
+	      <if test="sentiment != null and sentiment != ''">sentiment = #{sentiment},</if>
+	   	   update_date = now()
+	    </set>
+  			where id=#{id}
+	</update>
+	
+	
+	<select id="querysimilarityId" resultMap="BaseResultMap">
+		SELECT
+			<include refid="Base_column"/>
+		FROM
+			semantic
+		WHERE similarity_id = #{id} and id= #{id} and operator_id = #{operatorId}
+	</select>
+	
+	
+	<select id="queryAllsimilarityId" resultMap="BaseResultMap">
+		SELECT
+			<include refid="Base_column"/>
+		FROM
+			semantic
+		WHERE similarity_id = #{id} and operator_id = #{operatorId}
+	</select>
+	
+	
+	<select id="seletSemantic" resultMap="BaseResultMap">
+		SELECT
+			<include refid="Base_column"/>
+		FROM
+			semantic
+		<where>
+			<if test="intentId != null and intentId != ''">
+				and intent_id = #{intentId}
+			</if>
+			<if test="sceneId != null and sceneId != ''">
+				and scene_id = #{sceneId}
+			</if>
+			<if test="operatorId != null and operatorId != ''">
+				and operator_id = #{operatorId}
+			</if>
+			<if test="sentiment != null and sentiment !=''">
+				and sentiment = #{sentiment}
+			</if>
+		</where>
+	</select>
+	
+	
+	<delete id="batchDeleteSynonymous">
+		delete from semantic where operator_id = #{operatorId} <include refid="Base_Synonymous"/>
+	</delete>
+	
+	<sql id="Base_Synonymous">
+		<if test="arrys != null and arrys != '' ">
+			and id in
+			<foreach item="item" index="index" collection="arrys"
+		      open="(" separator="," close=")">
+		        #{item}
+		   </foreach>
+		</if>
+	</sql>
+	
+	<delete id="deletSemantic">
+		delete from semantic where id = #{id} and operator_id = #{operatorId}
+	</delete>
+	
+	<delete id="deleteSemanticAndSimilarity">
+		delete from semantic where similarity_id = #{id} and operator_id = #{operatorId}
+	</delete>
+	
+	<delete id="batchDelete">
+		delete from semantic where operator_id = #{operatorId} <include refid="Base_id"/>
+	</delete>
+	
+	<sql id="Base_id">
+		<if test="arrys != null and arrys != '' ">
+			and similarity_id in
+			<foreach item="item" index="index" collection="arrys"
+		      open="(" separator="," close=")">
+		        #{item}
+		   </foreach>
+		</if>
+	</sql>
+	
+</mapper>

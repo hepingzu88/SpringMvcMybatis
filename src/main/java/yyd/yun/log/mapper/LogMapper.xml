@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="yyd.yun.log.dao.LogDao" >
+	<resultMap type="yyd.yun.log.domain.Log" id="BaseResultMapLog">
+		<result column="i"  			property="i"  			/>
+		<result column="time"   		property="time"  		/>
+		<result column="rtype"  		property="rtype"  			/>
+		<result column="id"  			property="id"  			/>
+		<result column="text"   		property="text"  		/>
+		<result column="text_url"   	property="textUrl"  	/>
+		<result column="intent"   		property="intent"  	/>
+		<result column="service"  		property="service"  	/>
+		<result column="service_from"  	property="serviceFrom"  />
+		<result column="operation"  	property="operation"  	/>
+		<result column="moreResults"  	property="moreResults" />
+		<result column="answer"  		property="answer"  		/>
+		<result column="semantic"  		property="semantic"  	/>
+		<result column="version"  		property="version"  	/>
+		<result column="wrong"  		property="wrong"  		/>
+		<result column="reply"  		property="reply"  		/>
+	</resultMap>
+
+	<sql id=" base_column_log">
+		i,time,rtype,id,text,text_url,intent,service,service_from,operation,moreResults,answer,semantic,version,wrong,reply
+	</sql>
+
+	<select id="queryAllLog" resultMap="BaseResultMapLog">
+		select <include refid=" base_column_log"/> from log_robot_dialogue order by i desc
+	</select>
+	
+	<select id="queryVisitCount" parameterType="string"  resultType="int">
+	 	select count(*) from log_robot_dialogue where time BETWEEN #{startTime} AND #{endTime}
+	</select>
+
+</mapper>

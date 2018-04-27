@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yyd.yun.dao.EntityDao">
+	<resultMap type="yyd.yun.beans.Entity" id="BaseResult">
+		<result column="id"			 	property="id" 				jdbcType="INTEGER"/>
+		<result column="entity" 	 	property="entity" 			jdbcType="VARCHAR"/>
+		<result column="entity_english" property="entityEnglish" 	jdbcType="VARCHAR"/>
+		<result column="operator_id" 	property="operatorId"   	jdbcType="BIGINT"/>
+		<result column="create_date" 	property="createDate"   	jdbcType="TIMESTAMP"/>
+		<result column="scene_id" 	 	property="sceneId" 			jdbcType="BIGINT"/>
+	</resultMap>
+
+	<sql id="column">
+		id,entity,entity_english,operator_id,create_date,scene_id
+	</sql>
+
+	<insert id="addEntity">
+		insert into entity(entity,entity_english,operator_id,create_date,scene_id) value(#{entity},#{entityEnglish},#{operatorId},now(),#{sceneId})
+	</insert>
+	
+	<select id="queryByIdEntity" resultMap="BaseResult">
+		select <include refid="column"/> from entity where operator_id = #{operatorId}
+	</select>
+	
+	<select id="queryById" resultMap="BaseResult">
+		select <include refid="column"/> from entity where operator_id = #{operatorId}
+	</select>
+	
+	<select id="findEntityByName" resultMap="BaseResult">
+		select <include refid="column"/> from entity where operator_id = #{operatorId} and entity = #{entity}
+	</select>
+	
+	<select id="findEntityById" resultMap="BaseResult">
+		select <include refid="column"/> from entity 
+		<where>
+			<if test="operatorId != null and operatorId != ''">
+				and operator_id = #{operatorId}
+			</if>
+		    <if test="entity != null and entity != ''">
+				and entity = #{entity}
+			</if>
+			<if test="sceneId != null and sceneId != ''">
+				and scene_id = #{sceneId}
+			</if>
+			<if test="id != null and id != ''">
+				and id = #{id}
+			</if>
+		</where>
+	</select>
+
+</mapper>

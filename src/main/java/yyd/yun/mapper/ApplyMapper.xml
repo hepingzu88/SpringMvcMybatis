@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="yyd.yun.dao.ApplyDao">
+	<resultMap type="yyd.yun.beans.Apply"   id="BaseResult">
+		<result column="id"   				property="id"  			/>
+		<result column="apply_name"   		property="applyName"  	/>
+		<result column="create_date"    	property="createDate"  	/>
+		<result column="update_date"    	property="updateDate"  	/>
+		<result column="operator_id"    	property="operatorId"  	/>
+		<result column="scene_id"   		property="sceneId"  	/>
+		<result column="public_scene_id" 	property="publicSceneId"/>
+		<result column="apply_key"   		property="applyKey"  	/>
+		<result column="apply_class"    	property="applyClass"  	/>
+		<result column="depict"   			property="depict"  		/>
+		<result column="platform"   		property="platform"  	/>
+	</resultMap>
+
+	<sql id="base_column">
+		id,apply_name,create_date,update_date,operator_id,scene_id,public_scene_id,apply_key,apply_class,depict,platform
+	</sql>
+
+	<insert id="addApply">
+		insert into apply(apply_name,create_date,operator_id,apply_key,apply_class,depict,platform) 
+					value(#{applyName},now(),#{operatorId},#{applyKey},#{applyClass},#{depict},#{platform})
+	</insert>
+
+	<select id="queryAllApply" resultMap="BaseResult">
+		select <include refid="base_column"/> from apply where operator_id = #{operatorId}
+	</select>
+	
+	<select id="findById" resultMap="BaseResult">
+		select <include refid="base_column"/> from apply where operator_id = #{operatorId} and id = #{id}
+	</select>
+	
+	<select id="findByName" resultMap="BaseResult">
+		select <include refid="base_column"/> from apply where operator_id = #{operatorId} and apply_name = #{applyName}
+	</select>
+
+	<select id="selectApply" resultMap="BaseResult">
+		select <include refid="base_column"/> from apply 
+		<where>
+			<if test="sceneId != null and sceneId != ''">
+				and scene_id in(#{sceneId})
+			</if>
+			<if test="operatorId != null and operatorId != ''">
+				and operator_id = #{operatorId}
+			</if>
+			<if test="applyName != null and applyName != ''">
+				and apply_name = #{applyName}
+			</if>
+			<if test="id != null and id != ''">
+				and id = #{id}
+			</if>
+		</where>
+	</select>
+
+
+	<update id="updateApply">
+		update apply
+		<set>
+		  <if test="sceneId != null and sceneId != '' ">
+		  	scene_id = #{sceneId},
+		  </if>
+		  <if test="publicSceneId != null and publicSceneId != '' ">
+		  	public_scene_id = #{publicSceneId},
+		  </if>
+		  update_date = now()
+	    </set>
+  			where id=#{id}
+	</update>
+	
+	<update id="updateApplySceneId">
+		update apply set scene_id = #{sceneId}, update_date = now() where id=#{id}
+	</update>
+	
+	<update id="updateApplyPublicSceneId">
+		update apply set public_scene_id = #{publicSceneId}, update_date = now() where id=#{id}
+	</update>
+	
+	<delete id="deleteApply">
+		delete from apply where id = #{id}  and operator_id = #{operatorId}
+	</delete>
+	
+	
+
+</mapper>
